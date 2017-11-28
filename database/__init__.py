@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -25,14 +27,7 @@ def create_schema():
 
 def generate_test_data():
     session = Session()
-    session.add_all([
-        File(abs_path='/home/andy/Music/Audioslave/Audioslave/Audioslave - I Am the Highway.mp3'),
-        File(abs_path='/home/andy/Music/Audioslave/Audioslave/Audioslave - Light My Way.mp3', md5='f9601a71078daaa2e999fe344ea49c00'),
-        File(abs_path='/home/andy/Music/Audioslave/Audioslave/Audioslave - Exploder.mp3', name='Audioslave - Exploder', ext='mp3', md5='4a95b7c48f638bb39c11dd0b32809692')
-    ])
-
-    session.add_all([
-        Job(type='metadata', file_id=1)
-    ])
-
+    spec = json.loads(open('testdata.json', 'r').read())
+    session.add_all([File(**subspec) for subspec in spec['files']])
+    session.add_all([Job(**subspec) for subspec in spec['jobs']])
     session.commit()
