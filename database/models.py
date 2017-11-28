@@ -33,10 +33,8 @@ class Job(Base):
     status = Column(String(50), default='pending')
 
     def __repr__(self):
-        file_name = Session().query(File.name).filter(File.id == self.file_id).first()
-        return "<Job (id={0} type={1} file_id={2} file_name={3}".format(
+        return "<Job (id={0} type={1} file_id={2})>".format(
             self.id,
             self.type,
-            self.file_id,
-            file_name
+            self.file_id
         )
